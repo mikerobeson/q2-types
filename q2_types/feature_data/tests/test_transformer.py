@@ -23,7 +23,10 @@ from q2_types.feature_data import (
     PairedDNASequencesDirectoryFormat, AlignedDNAFASTAFormat,
     DifferentialFormat, AlignedDNAIterator, ProteinFASTAFormat,
     AlignedProteinFASTAFormat, RNAFASTAFormat, AlignedRNAFASTAFormat,
-    RNAIterator, AlignedRNAIterator
+    RNAIterator, AlignedRNAIterator, NucleicAcidFASTAFormat,
+    NucleicAcidIterator, NucleicAcidAlignedFASTAFormat, GenericFASTAFormat,
+    NucleicAcidAlignedIterator, GenericAlignedFASTAFormat,
+    GenericSequenceIterator
 )
 from q2_types.feature_data._transformer import (
     _taxonomy_formats_to_dataframe, _dataframe_to_tsv_taxonomy_format,
@@ -963,6 +966,234 @@ class TestDifferentialTransformer(TestPluginBase):
         obs = transformer(input)
 
         self.assertIsInstance(obs, DifferentialFormat)
+
+
+# Note no MSA tranformers fore the generic formats below as you must
+# specify a constructor. Will need to write a function for this.
+class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
+    package = 'q2_types.feature_data.tests'
+
+    def test_nucleic_acid_fasta_format_to_nucleic_acid_iterator_dna(self):
+        input, obs = self.transform_format(NucleicAcidFASTAFormat,
+                                           NucleicAcidIterator,
+                                          filename='dna-sequences.fasta')
+
+        exp = skbio.read(str(input), format='fasta',
+                         constructor=skbio.Sequence)
+
+        for observed, expected in zip(obs, exp):
+            self.assertEqual(observed, expected)
+
+    def test_nucleic_acid_iterator_to_nucleic_acid_fasta_format_dna(self):
+        transformer = self.get_transformer(NucleicAcidIterator,
+                                          NucleicAcidFASTAFormat)
+        filepath = self.get_data_path('dna-sequences.fasta')
+        generator = skbio.read(filepath, format='fasta',
+                               constructor=skbio.Sequence)
+        input = NucleicAcidIterator(generator)
+
+        obs = transformer(input)
+        self.assertIsInstance(obs, NucleicAcidFASTAFormat)
+        obs = skbio.read(str(obs), format='fasta', constructor=skbio.Sequence)
+
+        for act, exp in zip(obs, input):
+            self.assertEqual(act, exp)
+
+
+    def test_nucleic_acid_fasta_format_to_nucleic_acid_iterator_rna(self):
+        input, obs = self.transform_format(NucleicAcidFASTAFormat,
+                                           NucleicAcidIterator,
+                                          filename='rna-sequences.fasta')
+
+        exp = skbio.read(str(input), format='fasta',
+                         constructor=skbio.Sequence)
+
+        for observed, expected in zip(obs, exp):
+            self.assertEqual(observed, expected)
+
+
+    def test_nucleic_acid_iterator_to_nucleic_acid_fasta_format_rna(self):
+        transformer = self.get_transformer(NucleicAcidIterator,
+                                          NucleicAcidFASTAFormat)
+        filepath = self.get_data_path('rna-sequences.fasta')
+        generator = skbio.read(filepath, format='fasta',
+                               constructor=skbio.Sequence)
+        input = NucleicAcidIterator(generator)
+
+        obs = transformer(input)
+        self.assertIsInstance(obs, NucleicAcidFASTAFormat)
+        obs = skbio.read(str(obs), format='fasta', constructor=skbio.Sequence)
+
+        for act, exp in zip(obs, input):
+            self.assertEqual(act, exp)
+
+
+    def test_aln_nucleic_acid_fasta_fmt_to_aln_nucleic_acid_iter_dna(self):
+        filename = 'aligned-dna-sequences.fasta'
+        input, obs = self.transform_format(NucleicAcidAlignedFASTAFormat,
+                                           NucleicAcidAlignedIterator,
+                                           filename=filename)
+
+        exp = skbio.read(str(input), format='fasta',
+                         constructor=skbio.Sequence)
+
+        for observed, expected in zip(obs, exp):
+            self.assertEqual(observed, expected)
+
+
+    def test_aln_nucleic_acid_fasta_fmt_to_aln_nucleic_acid_iter_rna(self):
+        filename = 'aligned-rna-sequences.fasta'
+        input, obs = self.transform_format(NucleicAcidAlignedFASTAFormat,
+                                           NucleicAcidAlignedIterator,
+                                           filename=filename)
+
+        exp = skbio.read(str(input), format='fasta',
+                         constructor=skbio.Sequence)
+
+        for observed, expected in zip(obs, exp):
+            self.assertEqual(observed, expected)
+
+
+    def test_aln_nucleic_acid_iter_to_aln_nucleic_acid_fasta_fmt_dna(self):
+        transformer = self.get_transformer(NucleicAcidAlignedIterator,
+                                           NucleicAcidAlignedFASTAFormat)
+        filepath = self.get_data_path('aligned-dna-sequences.fasta')
+        generator = skbio.read(filepath, format='fasta',
+                               constructor=skbio.Sequence)
+        input = NucleicAcidAlignedIterator(generator)
+
+        obs = transformer(input)
+        self.assertIsInstance(obs, NucleicAcidAlignedFASTAFormat)
+        obs = skbio.read(str(obs), format='fasta',
+                         constructor=skbio.Sequence)
+
+        for act, exp in zip(obs, input):
+            self.assertEqual(act, exp)
+
+
+    def test_aln_nucleic_acid_iter_to_aln_nucleic_acid_fasta_fmt_rna(self):
+        transformer = self.get_transformer(NucleicAcidAlignedIterator,
+                                           NucleicAcidAlignedFASTAFormat)
+        filepath = self.get_data_path('aligned-rna-sequences.fasta')
+        generator = skbio.read(filepath, format='fasta',
+                               constructor=skbio.Sequence)
+        input = NucleicAcidAlignedIterator(generator)
+
+        obs = transformer(input)
+        self.assertIsInstance(obs, NucleicAcidAlignedFASTAFormat)
+        obs = skbio.read(str(obs), format='fasta',
+                         constructor=skbio.Sequence)
+
+        for act, exp in zip(obs, input):
+            self.assertEqual(act, exp)
+
+
+    # def test_nucleic_acid_fasta_format_to_series(self):
+    #     _, obs = self.transform_format(NucleicAcidFASTAFormat, pd.Series,
+    #                                    'rna-sequences.fasta')
+    #
+    #     obs = obs.astype(str)
+    #
+    #     index = pd.Index(['RNASEQUENCE1', 'RNASEQUENCE2'])
+    #     exp = pd.Series(['ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUA'
+    #                      'CGUACGUACGUACGUACGU', 'ACGUACGUACGUACGUACGUAC'
+    #                      'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACG'
+    #                      'UACGUACGUACGUACGUACGU'], index=index, dtype=object)
+    #
+    #     assert_series_equal(exp, obs)
+    #
+    # def test_series_to_nucleic_acid_fasta_format(self):
+    #     transformer = self.get_transformer(pd.Series, NucleicAcidFASTAFormat)
+    #
+    #     index = pd.Index(['RNASEQUENCE1', 'RNASEQUENCE2'])
+    #     input = pd.Series(['ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUA'
+    #                        'CGUACGUACGUACGUACGU', 'ACGUACGUACGUACGUACGUAC'
+    #                        'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACG'
+    #                        'UACGUACGUACGUACGUACGU'], index=index, dtype=object)
+    #
+    #     obs = transformer(input)
+    #
+    #     self.assertIsInstance(obs, NucleicAcidFASTAFormat)
+    #
+    # def test_nucleic_acidfasta_format_with_duplicate_ids_to_series(self):
+    #     with self.assertRaisesRegex(ValueError, 'unique.*NucleicAcidSEQUENCE1'):
+    #         self.transform_format(NucleicAcidFASTAFormat, pd.Series,
+    #                               'nucleic_acid-sequences-with-duplicate-ids.fasta')
+    #
+    # def test_nucleic_acidfasta_format_to_metadata(self):
+    #     _, obs = self.transform_format(NucleicAcidFASTAFormat, qiime2.Metadata,
+    #                                    'nucleic_acid-sequences.fasta')
+    #     index = pd.Index(['NucleicAcidSEQUENCE1', 'NucleicAcidSEQUENCE2'], name='Feature ID')
+    #     exp_df = pd.DataFrame(['ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUA'
+    #                            'CGUACGUACGUACGUACGU', 'ACGUACGUACGUACGUACGUAC'
+    #                            'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACG'
+    #                            'UACGUACGUACGUACGUACGU'], index=index,
+    #                           columns=['Sequence'], dtype=object)
+    #     exp = qiime2.Metadata(exp_df)
+    #
+    #     self.assertEqual(exp, obs)
+    #
+    # def test_aligned_nucleic_acidfasta_format_to_metadata(self):
+    #     _, obs = self.transform_format(AlignedNucleicAcidFASTAFormat, qiime2.Metadata,
+    #                                    'aligned-nucleic_acid-sequences.fasta')
+    #     index = pd.Index(['NucleicAcidSEQUENCE1', 'NucleicAcidSEQUENCE2'], name='Feature ID')
+    #     exp_df = pd.DataFrame(['------------------------ACGUACGUACGUACGUACGUAC'
+    #                            'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU',
+    #                            'ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUAC'
+    #                            'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU'],
+    #                           index=index, columns=['Sequence'], dtype=object)
+    #     exp = qiime2.Metadata(exp_df)
+    #
+    #     self.assertEqual(exp, obs)
+    #
+    # def test_aligned_nucleic_acidfasta_format_to_series(self):
+    #     _, obs = self.transform_format(AlignedNucleicAcidFASTAFormat, pd.Series,
+    #                                    'aligned-nucleic_acid-sequences.fasta')
+    #
+    #     obs = obs.astype(str)
+    #
+    #     index = pd.Index(['NucleicAcidSEQUENCE1', 'NucleicAcidSEQUENCE2'])
+    #     exp = pd.Series(['------------------------ACGUACGUACGUACGUACGUAC'
+    #                      'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU',
+    #                      'ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUAC'
+    #                      'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU'],
+    #                     index=index, dtype=object)
+    #
+    #     assert_series_equal(exp, obs)
+    #
+    # def test_series_to_aligned_nucleic_acidfasta_format(self):
+    #     transformer = self.get_transformer(pd.Series, AlignedNucleicAcidFASTAFormat)
+    #
+    #     index = pd.Index(['NucleicAcidSEQUENCE1', 'NucleicAcidSEQUENCE2'])
+    #     input = pd.Series(['------------------------ACGUACGUACGUACGUACGUAC'
+    #                        'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU',
+    #                        'ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUAC'
+    #                        'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU'],
+    #                       index=index, dtype=object)
+    #
+    #     obs = transformer(input)
+    #
+    #     self.assertIsInstance(obs, AlignedNucleicAcidFASTAFormat)
+    #
+    #     obs_lines = list(open(str(obs)))
+    #     self.assertEqual(obs_lines[0], '>NucleicAcidSEQUENCE1\n')
+    #     self.assertEqual(obs_lines[1],
+    #                      '------------------------ACGUACGUACGUACGUACGUAC'
+    #                      'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU\n')
+    #     self.assertEqual(obs_lines[2], '>NucleicAcidSEQUENCE2\n')
+    #     self.assertEqual(obs_lines[3],
+    #                      'ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUAC'
+    #                      'GUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGU\n')
+    #
+    # def test_aligned_nucleic_acid_fasta_format_to_nucleic_acid_iterator(self):
+    #     input, obs = self.transform_format(
+    #         AlignedNucleicAcidFASTAFormat, NucleicAcidIterator,
+    #         filename='aligned-nucleic_acid-sequences.fasta')
+    #
+    #     exp = skbio.read(str(input), format='fasta', constructor=skbio.NucleicAcid)
+    #
+    #     for observed, expected in zip(obs, exp):
+    #         self.assertEqual(observed, expected)
 
 
 class TestProteinFASTAFormatTransformers(TestPluginBase):

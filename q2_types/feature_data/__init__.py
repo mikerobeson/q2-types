@@ -30,9 +30,10 @@ from ._type import (
 
 # TODO remove these imports when tests are rewritten. Remove from __all__ too
 from ._transformer import (
-    NucleicAcidIterator, DNAIterator, PairedDNAIterator, AlignedDNAIterator,
-    ProteinIterator, AlignedProteinIterator, RNAIterator, AlignedRNAIterator,
-    PairedRNAIterator, GenericSequenceIterator, GenericAlignedSequenceIterator)
+    NucleicAcidIterator, NucleicAcidAlignedIterator, DNAIterator,
+    PairedDNAIterator, AlignedDNAIterator, ProteinIterator,
+    AlignedProteinIterator, RNAIterator, AlignedRNAIterator, PairedRNAIterator,
+    GenericSequenceIterator, GenericAlignedSequenceIterator)
 
 __all__ = [
     'TaxonomyFormat', 'TaxonomyDirectoryFormat', 'HeaderlessTSVTaxonomyFormat',
@@ -53,7 +54,7 @@ __all__ = [
     'PairedRNAIterator', 'PairedRNASequencesDirectoryFormat',
     'PairedEndRNASequence', 'GenericSequenceIterator',
     'GenericAlignedSequenceIterator', 'NucleicAcidFASTAFormat',
-    'NucleicAcidAlignedFASTAFormat',
+    'NucleicAcidAlignedFASTAFormat', 'NucleicAcidAlignedIterator'
     'NucleicAcidAlignedSequencesDirectoryFormat',
     'NucleicAcidSequencesDirectoryFormat', 'GenericAlignedFASTAFormat',
     'GenericFASTAFormat', 'GenericSequencesDirectoryFormat',
