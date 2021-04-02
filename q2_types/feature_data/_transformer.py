@@ -20,8 +20,9 @@ from . import (TaxonomyFormat, HeaderlessTSVTaxonomyFormat, TSVTaxonomyFormat,
                DNAFASTAFormat, PairedDNASequencesDirectoryFormat,
                AlignedDNAFASTAFormat, DifferentialFormat, ProteinFASTAFormat,
                AlignedProteinFASTAFormat, RNAFASTAFormat,
-               AlignedRNAFASTAFormat, PairedRNASequencesDirectoryFormat
-               )
+               AlignedRNAFASTAFormat, PairedRNASequencesDirectoryFormat,
+               FASTAFormat, AlignedFASTAFormatMixin, GenericAlignedFASTAFormat,
+               GenericFASTAFormat)
 
 
 # Taxonomy format transformers
@@ -264,15 +265,25 @@ def _series_to_fasta_format(ff, data, sequence_type="DNA"):
                     "protein FASTA format.")
             skbio.io.write(sequence, format='fasta', into=f)
 
-# DNA FASTA transformers
 
+# Generic Fasta sequence transformer for Nucleic Acid and AminoAcid seqs
+# Called 'GenericSequenceIterator' to avoid confusion with the 'Sequence'
+# type which is actually for DNA only.
 
-class NucleicAcidIterator(collections.abc.Iterable):
+class GenericSequenceIterator(collections.abc.Iterable):
     def __init__(self, generator):
         self.generator = generator
 
     def __iter__(self):
         yield from self.generator
+
+
+class GenericAlignedSequenceIterator(GenericSequenceIterator):
+    pass
+
+
+class NucleicAcidIterator(GenericSequenceIterator):
+    pass
 
 
 class DNAIterator(NucleicAcidIterator):
@@ -419,12 +430,8 @@ def _36(fmt: AlignedDNAFASTAFormat) -> DNAIterator:
 
 # Protein FASTA transformers
 
-class ProteinIterator(collections.abc.Iterable):
-    def __init__(self, generator):
-        self.generator = generator
-
-    def __iter__(self):
-        yield from self.generator
+class ProteinIterator(GenericSequenceIterator):
+    pass
 
 
 class AlignedProteinIterator(ProteinIterator):
@@ -626,6 +633,33 @@ def _64(data: PairedRNAIterator) -> PairedRNASequencesDirectoryFormat:
     df.left_rna_sequences.write_data(ff_left, RNAFASTAFormat)
     df.right_rna_sequences.write_data(ff_right, RNAFASTAFormat)
     return df
+
+
+# Generic Sequence Transformers
+@plugin.register_transformer
+def _65(ff: FASTAFormat) -> GenericSequenceIterator:
+    generator = _read_from_fasta(str(ff), skbio.Sequence)
+    return GenericSequenceIterator(generator)
+
+
+@plugin.register_transformer
+def _66(data: GenericSequenceIterator) -> GenericFASTAFormat:
+    ff = GenericFASTAFormat()
+    skbio.io.write(iter(data), format='fasta', into=str(ff))
+    return ff
+
+
+@plugin.register_transformer
+def _67(ff: AlignedFASTAFormatMixin) -> GenericAlignedSequenceIterator:
+    generator = _read_from_fasta(str(ff), skbio.Sequence)
+    return GenericAlignedSequenceIterator(generator)
+
+
+@plugin.register_transformer
+def _68(data: GenericSequenceIterator) -> GenericAlignedFASTAFormat:
+    ff = GenericAlignedFASTAFormat()
+    skbio.io.write(iter(data), format='fasta', into=str(ff))
+    return ff
 
 
 # differential types

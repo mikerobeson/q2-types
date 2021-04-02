@@ -18,7 +18,11 @@ from ._format import (
     AlignedProteinSequencesDirectoryFormat, ProteinSequencesDirectoryFormat,
     ProteinFASTAFormat, AlignedProteinFASTAFormat, RNASequencesDirectoryFormat,
     RNAFASTAFormat, AlignedRNAFASTAFormat, AlignedRNASequencesDirectoryFormat,
-    PairedRNASequencesDirectoryFormat)
+    PairedRNASequencesDirectoryFormat, NucleicAcidFASTAFormat,
+    NucleicAcidAlignedFASTAFormat, NucleicAcidAlignedSequencesDirectoryFormat,
+    NucleicAcidSequencesDirectoryFormat, GenericAlignedFASTAFormat,
+    GenericFASTAFormat, GenericSequencesDirectoryFormat,
+    GenericAlignedSequencesDirectoryFormat)
 from ._type import (
     FeatureData, Taxonomy, Sequence, PairedEndSequence, AlignedSequence,
     Differential, ProteinSequence, AlignedProteinSequence, RNASequence,
@@ -28,7 +32,7 @@ from ._type import (
 from ._transformer import (
     NucleicAcidIterator, DNAIterator, PairedDNAIterator, AlignedDNAIterator,
     ProteinIterator, AlignedProteinIterator, RNAIterator, AlignedRNAIterator,
-    PairedRNAIterator)
+    PairedRNAIterator, GenericSequenceIterator, GenericAlignedSequenceIterator)
 
 __all__ = [
     'TaxonomyFormat', 'TaxonomyDirectoryFormat', 'HeaderlessTSVTaxonomyFormat',
@@ -47,6 +51,12 @@ __all__ = [
     'RNAFASTAFormat', 'AlignedRNAFASTAFormat', 'RNASequencesDirectoryFormat',
     'AlignedRNASequencesDirectoryFormat', 'RNASequence', 'AlignedRNASequence',
     'PairedRNAIterator', 'PairedRNASequencesDirectoryFormat',
-    'PairedEndRNASequence']
+    'PairedEndRNASequence', 'GenericSequenceIterator',
+    'GenericAlignedSequenceIterator', 'NucleicAcidFASTAFormat',
+    'NucleicAcidAlignedFASTAFormat',
+    'NucleicAcidAlignedSequencesDirectoryFormat',
+    'NucleicAcidSequencesDirectoryFormat', 'GenericAlignedFASTAFormat',
+    'GenericFASTAFormat', 'GenericSequencesDirectoryFormat',
+    'GenericAlignedSequencesDirectoryFormat']
 
 importlib.import_module('q2_types.feature_data._transformer')

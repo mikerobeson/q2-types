@@ -15,7 +15,8 @@ from . import (TSVTaxonomyDirectoryFormat, DNASequencesDirectoryFormat,
                DifferentialDirectoryFormat, ProteinSequencesDirectoryFormat,
                AlignedProteinSequencesDirectoryFormat,
                RNASequencesDirectoryFormat, AlignedRNASequencesDirectoryFormat,
-               PairedRNASequencesDirectoryFormat)
+               PairedRNASequencesDirectoryFormat
+               )
 
 
 FeatureData = SemanticType('FeatureData', field_names='type')

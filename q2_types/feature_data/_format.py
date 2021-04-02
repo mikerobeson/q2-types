@@ -268,10 +268,57 @@ class AlignedFASTAFormatMixin:
                                   'be the same length for AlignedFASTAFormat.')
 
 
+class GenericFASTAFormat(FASTAFormat):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        nucleic_acid_alphabet = "ACGTURYKMSWBDHVN"
+        amino_acid_alphabet = "ABCDEFGHIKLMNPQRSTVWXYZ"
+        self.alphabet = str(set(nucleic_acid_alphabet + amino_acid_alphabet))
+
+
+GenericSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'GenericSequencesDirectoryFormat', 'sequences.fasta', GenericFASTAFormat)
+
+
+class GenericAlignedFASTAFormat(AlignedFASTAFormatMixin, GenericFASTAFormat):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        super()._turn_into_alignment()
+
+
+GenericAlignedSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'GenericAlignedSequencesDirectoryFormat', 'aligned-sequences.fasta',
+    GenericAlignedFASTAFormat)
+
+
+class NucleicAcidFASTAFormat(FASTAFormat):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.alphabet = "ACGTURYKMSWBDHVN"  # Reads both RNA/DNA
+
+
+NucleicAcidSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'NucleicAcidSequencesDirectoryFormat', 'nucleic-acid-sequences.fasta',
+    NucleicAcidFASTAFormat)
+
+
+class NucleicAcidAlignedFASTAFormat(AlignedFASTAFormatMixin,
+                                    NucleicAcidFASTAFormat):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        super()._turn_into_alignment()
+
+
+NucleicAcidAlignedSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'GenericAlignedSequencesDirectoryFormat',
+    'aligned-nucleic-acid-sequences.fasta',
+    NucleicAcidAlignedFASTAFormat)
+
+
 class DNAFASTAFormat(FASTAFormat):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.alphabet = "ACGTRYKMSWBDHVN"
+        self.alphabet = "ACGTRYKMSWBDHVN"  # No 'U'
 
 
 DNASequencesDirectoryFormat = model.SingleFileDirectoryFormat(
@@ -281,7 +328,7 @@ DNASequencesDirectoryFormat = model.SingleFileDirectoryFormat(
 class RNAFASTAFormat(FASTAFormat):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.alphabet = "ACGURYKMSWBDHVN"
+        self.alphabet = "ACGURYKMSWBDHVN"  # No 'T'.
 
 
 RNASequencesDirectoryFormat = model.SingleFileDirectoryFormat(
@@ -386,5 +433,7 @@ plugin.register_formats(
     AlignedProteinFASTAFormat, ProteinSequencesDirectoryFormat,
     AlignedProteinSequencesDirectoryFormat, RNAFASTAFormat,
     RNASequencesDirectoryFormat, AlignedRNAFASTAFormat,
-    AlignedRNASequencesDirectoryFormat, PairedRNASequencesDirectoryFormat
+    AlignedRNASequencesDirectoryFormat, PairedRNASequencesDirectoryFormat,
+    NucleicAcidAlignedFASTAFormat, NucleicAcidAlignedSequencesDirectoryFormat,
+    NucleicAcidSequencesDirectoryFormat
 )
