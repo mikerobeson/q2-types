@@ -697,6 +697,17 @@ def _73(ff: NucleicAcidAlignedFASTAFormat) -> pd.Series:
     return _fastaformats_to_series(ff, skbio.Sequence)
 
 
+@plugin.register_transformer
+def _74(ff: RNAFASTAFormat) -> NucleicAcidIterator:
+    generator = _read_from_fasta(str(ff), constructor=skbio.RNA)
+    return NucleicAcidIterator(generator)
+
+
+@plugin.register_transformer
+def _75(ff: DNAFASTAFormat) -> NucleicAcidIterator:
+    generator = _read_from_fasta(str(ff), constructor=skbio.DNA)
+    return NucleicAcidIterator(generator)
+
 # def _74(ff: NucleicAcidAlignedFASTAFormat) -> qiime2.Metadata:
 #     return _fastaformats_to_metadata(ff, skbio.Sequence)
 #
