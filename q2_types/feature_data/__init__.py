@@ -54,7 +54,7 @@ __all__ = [
     'PairedRNAIterator', 'PairedRNASequencesDirectoryFormat',
     'PairedEndRNASequence', 'GenericSequenceIterator',
     'AlignedGenericSequenceIterator', 'NucleicAcidFASTAFormat',
-    'AlignedNucleicAcidFASTAFormat', 'AlignedNucleicAcidIterator'
+    'AlignedNucleicAcidFASTAFormat', 'AlignedNucleicAcidIterator',
     'AlignedNucleicAcidSequencesDirectoryFormat',
     'NucleicAcidSequencesDirectoryFormat', 'AlignedGenericFASTAFormat',
     'GenericFASTAFormat', 'GenericSequencesDirectoryFormat',
