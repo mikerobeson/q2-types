@@ -24,8 +24,8 @@ from q2_types.feature_data import (
     DifferentialFormat, AlignedDNAIterator, ProteinFASTAFormat,
     AlignedProteinFASTAFormat, RNAFASTAFormat, AlignedRNAFASTAFormat,
     RNAIterator, AlignedRNAIterator, NucleicAcidFASTAFormat,
-    NucleicAcidIterator, NucleicAcidAlignedFASTAFormat, GenericFASTAFormat,
-    NucleicAcidAlignedIterator, GenericAlignedFASTAFormat,
+    NucleicAcidIterator, AlignedNucleicAcidFASTAFormat, GenericFASTAFormat,
+    AlignedNucleicAcidIterator, AlignedGenericFASTAFormat,
     GenericSequenceIterator
 )
 from q2_types.feature_data._transformer import (
@@ -976,7 +976,7 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
     def test_nucleic_acid_fasta_format_to_nucleic_acid_iterator_dna(self):
         input, obs = self.transform_format(NucleicAcidFASTAFormat,
                                            NucleicAcidIterator,
-                                          filename='dna-sequences.fasta')
+                                           filename='dna-sequences.fasta')
 
         exp = skbio.read(str(input), format='fasta',
                          constructor=skbio.Sequence)
@@ -986,7 +986,7 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
 
     def test_nucleic_acid_iterator_to_nucleic_acid_fasta_format_dna(self):
         transformer = self.get_transformer(NucleicAcidIterator,
-                                          NucleicAcidFASTAFormat)
+                                           NucleicAcidFASTAFormat)
         filepath = self.get_data_path('dna-sequences.fasta')
         generator = skbio.read(filepath, format='fasta',
                                constructor=skbio.Sequence)
@@ -999,11 +999,10 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
         for act, exp in zip(obs, input):
             self.assertEqual(act, exp)
 
-
     def test_nucleic_acid_fasta_format_to_nucleic_acid_iterator_rna(self):
         input, obs = self.transform_format(NucleicAcidFASTAFormat,
                                            NucleicAcidIterator,
-                                          filename='rna-sequences.fasta')
+                                           filename='rna-sequences.fasta')
 
         exp = skbio.read(str(input), format='fasta',
                          constructor=skbio.Sequence)
@@ -1011,10 +1010,9 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
         for observed, expected in zip(obs, exp):
             self.assertEqual(observed, expected)
 
-
     def test_nucleic_acid_iterator_to_nucleic_acid_fasta_format_rna(self):
         transformer = self.get_transformer(NucleicAcidIterator,
-                                          NucleicAcidFASTAFormat)
+                                           NucleicAcidFASTAFormat)
         filepath = self.get_data_path('rna-sequences.fasta')
         generator = skbio.read(filepath, format='fasta',
                                constructor=skbio.Sequence)
@@ -1027,11 +1025,10 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
         for act, exp in zip(obs, input):
             self.assertEqual(act, exp)
 
-
     def test_aln_nucleic_acid_fasta_fmt_to_aln_nucleic_acid_iter_dna(self):
         filename = 'aligned-dna-sequences.fasta'
-        input, obs = self.transform_format(NucleicAcidAlignedFASTAFormat,
-                                           NucleicAcidAlignedIterator,
+        input, obs = self.transform_format(AlignedNucleicAcidFASTAFormat,
+                                           AlignedNucleicAcidIterator,
                                            filename=filename)
 
         exp = skbio.read(str(input), format='fasta',
@@ -1039,12 +1036,11 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
 
         for observed, expected in zip(obs, exp):
             self.assertEqual(observed, expected)
-
 
     def test_aln_nucleic_acid_fasta_fmt_to_aln_nucleic_acid_iter_rna(self):
         filename = 'aligned-rna-sequences.fasta'
-        input, obs = self.transform_format(NucleicAcidAlignedFASTAFormat,
-                                           NucleicAcidAlignedIterator,
+        input, obs = self.transform_format(AlignedNucleicAcidFASTAFormat,
+                                           AlignedNucleicAcidIterator,
                                            filename=filename)
 
         exp = skbio.read(str(input), format='fasta',
@@ -1053,41 +1049,38 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
         for observed, expected in zip(obs, exp):
             self.assertEqual(observed, expected)
 
-
     def test_aln_nucleic_acid_iter_to_aln_nucleic_acid_fasta_fmt_dna(self):
-        transformer = self.get_transformer(NucleicAcidAlignedIterator,
-                                           NucleicAcidAlignedFASTAFormat)
+        transformer = self.get_transformer(AlignedNucleicAcidIterator,
+                                           AlignedNucleicAcidFASTAFormat)
         filepath = self.get_data_path('aligned-dna-sequences.fasta')
         generator = skbio.read(filepath, format='fasta',
                                constructor=skbio.Sequence)
-        input = NucleicAcidAlignedIterator(generator)
+        input = AlignedNucleicAcidIterator(generator)
 
         obs = transformer(input)
-        self.assertIsInstance(obs, NucleicAcidAlignedFASTAFormat)
+        self.assertIsInstance(obs, AlignedNucleicAcidFASTAFormat)
         obs = skbio.read(str(obs), format='fasta',
                          constructor=skbio.Sequence)
 
         for act, exp in zip(obs, input):
             self.assertEqual(act, exp)
 
-
     def test_aln_nucleic_acid_iter_to_aln_nucleic_acid_fasta_fmt_rna(self):
-        transformer = self.get_transformer(NucleicAcidAlignedIterator,
-                                           NucleicAcidAlignedFASTAFormat)
+        transformer = self.get_transformer(AlignedNucleicAcidIterator,
+                                           AlignedNucleicAcidFASTAFormat)
         filepath = self.get_data_path('aligned-rna-sequences.fasta')
         generator = skbio.read(filepath, format='fasta',
                                constructor=skbio.Sequence)
-        input = NucleicAcidAlignedIterator(generator)
+        input = AlignedNucleicAcidIterator(generator)
 
         obs = transformer(input)
-        self.assertIsInstance(obs, NucleicAcidAlignedFASTAFormat)
+        self.assertIsInstance(obs, AlignedNucleicAcidFASTAFormat)
         obs = skbio.read(str(obs), format='fasta',
                          constructor=skbio.Sequence)
 
         for act, exp in zip(obs, input):
             self.assertEqual(act, exp)
-
-
+    #
     # def test_nucleic_acid_fasta_format_to_series(self):
     #     _, obs = self.transform_format(NucleicAcidFASTAFormat, pd.Series,
     #                                    'rna-sequences.fasta')
@@ -1104,7 +1097,7 @@ class TestNucleicAcidFASTAFormatTransformers(TestPluginBase):
     #
     # def test_series_to_nucleic_acid_fasta_format(self):
     #     transformer = self.get_transformer(pd.Series, NucleicAcidFASTAFormat)
-    #
+    # 
     #     index = pd.Index(['RNASEQUENCE1', 'RNASEQUENCE2'])
     #     input = pd.Series(['ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUA'
     #                        'CGUACGUACGUACGUACGU', 'ACGUACGUACGUACGUACGUAC'

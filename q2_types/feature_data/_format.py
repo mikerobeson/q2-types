@@ -280,15 +280,15 @@ GenericSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
     'GenericSequencesDirectoryFormat', 'sequences.fasta', GenericFASTAFormat)
 
 
-class GenericAlignedFASTAFormat(AlignedFASTAFormatMixin, GenericFASTAFormat):
+class AlignedGenericFASTAFormat(AlignedFASTAFormatMixin, GenericFASTAFormat):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         super()._turn_into_alignment()
 
 
-GenericAlignedSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
-    'GenericAlignedSequencesDirectoryFormat', 'aligned-sequences.fasta',
-    GenericAlignedFASTAFormat)
+AlignedGenericSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'AlignedGenericSequencesDirectoryFormat', 'aligned-sequences.fasta',
+    AlignedGenericFASTAFormat)
 
 
 class NucleicAcidFASTAFormat(FASTAFormat):
@@ -302,17 +302,17 @@ NucleicAcidSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
     NucleicAcidFASTAFormat)
 
 
-class NucleicAcidAlignedFASTAFormat(AlignedFASTAFormatMixin,
+class AlignedNucleicAcidFASTAFormat(AlignedFASTAFormatMixin,
                                     NucleicAcidFASTAFormat):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         super()._turn_into_alignment()
 
 
-NucleicAcidAlignedSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
-    'GenericAlignedSequencesDirectoryFormat',
+AlignedNucleicAcidSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'AlignedGenericSequencesDirectoryFormat',
     'aligned-nucleic-acid-sequences.fasta',
-    NucleicAcidAlignedFASTAFormat)
+    AlignedNucleicAcidFASTAFormat)
 
 
 class DNAFASTAFormat(FASTAFormat):
@@ -434,6 +434,6 @@ plugin.register_formats(
     AlignedProteinSequencesDirectoryFormat, RNAFASTAFormat,
     RNASequencesDirectoryFormat, AlignedRNAFASTAFormat,
     AlignedRNASequencesDirectoryFormat, PairedRNASequencesDirectoryFormat,
-    NucleicAcidAlignedFASTAFormat, NucleicAcidAlignedSequencesDirectoryFormat,
+    AlignedNucleicAcidFASTAFormat, AlignedNucleicAcidSequencesDirectoryFormat,
     NucleicAcidSequencesDirectoryFormat
 )

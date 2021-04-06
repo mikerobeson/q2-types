@@ -21,8 +21,8 @@ from . import (TaxonomyFormat, HeaderlessTSVTaxonomyFormat, TSVTaxonomyFormat,
                AlignedDNAFASTAFormat, DifferentialFormat, ProteinFASTAFormat,
                AlignedProteinFASTAFormat, RNAFASTAFormat,
                AlignedRNAFASTAFormat, PairedRNASequencesDirectoryFormat,
-               GenericAlignedFASTAFormat, GenericFASTAFormat,
-               NucleicAcidAlignedFASTAFormat, NucleicAcidFASTAFormat)
+               AlignedGenericFASTAFormat, GenericFASTAFormat,
+               AlignedNucleicAcidFASTAFormat, NucleicAcidFASTAFormat)
 
 
 # Taxonomy format transformers
@@ -278,7 +278,7 @@ class GenericSequenceIterator(collections.abc.Iterable):
         yield from self.generator
 
 
-class GenericAlignedSequenceIterator(GenericSequenceIterator):
+class AlignedGenericSequenceIterator(GenericSequenceIterator):
     pass
 
 
@@ -286,7 +286,7 @@ class NucleicAcidIterator(GenericSequenceIterator):
     pass
 
 
-class NucleicAcidAlignedIterator(NucleicAcidIterator):
+class AlignedNucleicAcidIterator(NucleicAcidIterator):
     pass
 
 
@@ -654,14 +654,14 @@ def _66(data: GenericSequenceIterator) -> GenericFASTAFormat:
 
 
 @plugin.register_transformer
-def _67(ff: GenericAlignedFASTAFormat) -> GenericAlignedSequenceIterator:
+def _67(ff: AlignedGenericFASTAFormat) -> AlignedGenericSequenceIterator:
     generator = _read_from_fasta(str(ff), skbio.Sequence)
-    return GenericAlignedSequenceIterator(generator)
+    return AlignedGenericSequenceIterator(generator)
 
 
 @plugin.register_transformer
-def _68(data: GenericAlignedSequenceIterator) -> GenericAlignedFASTAFormat:
-    ff = GenericAlignedFASTAFormat()
+def _68(data: AlignedGenericSequenceIterator) -> AlignedGenericFASTAFormat:
+    ff = AlignedGenericFASTAFormat()
     skbio.io.write(iter(data), format='fasta', into=str(ff))
     return ff
 
@@ -680,20 +680,20 @@ def _70(data: NucleicAcidIterator) -> NucleicAcidFASTAFormat:
 
 
 @plugin.register_transformer
-def _71(ff: NucleicAcidAlignedFASTAFormat) -> NucleicAcidAlignedIterator:
+def _71(ff: AlignedNucleicAcidFASTAFormat) -> AlignedNucleicAcidIterator:
     generator = _read_from_fasta(str(ff), skbio.Sequence)
-    return NucleicAcidAlignedIterator(generator)
+    return AlignedNucleicAcidIterator(generator)
 
 
 @plugin.register_transformer
-def _72(data: NucleicAcidAlignedIterator) -> NucleicAcidAlignedFASTAFormat:
-    ff = NucleicAcidAlignedFASTAFormat()
+def _72(data: AlignedNucleicAcidIterator) -> AlignedNucleicAcidFASTAFormat:
+    ff = AlignedNucleicAcidFASTAFormat()
     skbio.io.write(iter(data), format='fasta', into=str(ff))
     return ff
 
 
 @plugin.register_transformer
-def _73(ff: NucleicAcidAlignedFASTAFormat) -> pd.Series:
+def _73(ff: AlignedNucleicAcidFASTAFormat) -> pd.Series:
     return _fastaformats_to_series(ff, skbio.Sequence)
 
 
@@ -708,7 +708,7 @@ def _75(ff: DNAFASTAFormat) -> NucleicAcidIterator:
     generator = _read_from_fasta(str(ff), constructor=skbio.DNA)
     return NucleicAcidIterator(generator)
 
-# def _74(ff: NucleicAcidAlignedFASTAFormat) -> qiime2.Metadata:
+# def _74(ff: AlignedNucleicAcidFASTAFormat) -> qiime2.Metadata:
 #     return _fastaformats_to_metadata(ff, skbio.Sequence)
 #
 #
@@ -719,14 +719,14 @@ def _75(ff: DNAFASTAFormat) -> NucleicAcidIterator:
 #     return ff
 #
 # @plugin.register_transformer
-# def _73(ff: NucleicAcidAlignedFASTAFormat) -> skbio.TabularMSA:
+# def _73(ff: AlignedNucleicAcidFASTAFormat) -> skbio.TabularMSA:
 #     return skbio.TabularMSA.read(str(ff), constructor=skbio.Sequence,
 #                                  format='fasta')
 #
 #
 # @plugin.register_transformer
-# def _74(data: skbio.TabularMSA) -> NucleicAcidAlignedFASTAFormat:
-#     ff = NucleicAcidAlignedFASTAFormat()
+# def _74(data: skbio.TabularMSA) -> AlignedNucleicAcidFASTAFormat:
+#     ff = AlignedNucleicAcidFASTAFormat()
 #     data.write(str(ff), format='fasta')
 #     return ff
 #

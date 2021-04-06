@@ -19,10 +19,10 @@ from ._format import (
     ProteinFASTAFormat, AlignedProteinFASTAFormat, RNASequencesDirectoryFormat,
     RNAFASTAFormat, AlignedRNAFASTAFormat, AlignedRNASequencesDirectoryFormat,
     PairedRNASequencesDirectoryFormat, NucleicAcidFASTAFormat,
-    NucleicAcidAlignedFASTAFormat, NucleicAcidAlignedSequencesDirectoryFormat,
-    NucleicAcidSequencesDirectoryFormat, GenericAlignedFASTAFormat,
+    AlignedNucleicAcidFASTAFormat, AlignedNucleicAcidSequencesDirectoryFormat,
+    NucleicAcidSequencesDirectoryFormat, AlignedGenericFASTAFormat,
     GenericFASTAFormat, GenericSequencesDirectoryFormat,
-    GenericAlignedSequencesDirectoryFormat)
+    AlignedGenericSequencesDirectoryFormat)
 from ._type import (
     FeatureData, Taxonomy, Sequence, PairedEndSequence, AlignedSequence,
     Differential, ProteinSequence, AlignedProteinSequence, RNASequence,
@@ -30,10 +30,10 @@ from ._type import (
 
 # TODO remove these imports when tests are rewritten. Remove from __all__ too
 from ._transformer import (
-    NucleicAcidIterator, NucleicAcidAlignedIterator, DNAIterator,
+    NucleicAcidIterator, AlignedNucleicAcidIterator, DNAIterator,
     PairedDNAIterator, AlignedDNAIterator, ProteinIterator,
     AlignedProteinIterator, RNAIterator, AlignedRNAIterator, PairedRNAIterator,
-    GenericSequenceIterator, GenericAlignedSequenceIterator)
+    GenericSequenceIterator, AlignedGenericSequenceIterator)
 
 __all__ = [
     'TaxonomyFormat', 'TaxonomyDirectoryFormat', 'HeaderlessTSVTaxonomyFormat',
@@ -53,11 +53,11 @@ __all__ = [
     'AlignedRNASequencesDirectoryFormat', 'RNASequence', 'AlignedRNASequence',
     'PairedRNAIterator', 'PairedRNASequencesDirectoryFormat',
     'PairedEndRNASequence', 'GenericSequenceIterator',
-    'GenericAlignedSequenceIterator', 'NucleicAcidFASTAFormat',
-    'NucleicAcidAlignedFASTAFormat', 'NucleicAcidAlignedIterator'
-    'NucleicAcidAlignedSequencesDirectoryFormat',
-    'NucleicAcidSequencesDirectoryFormat', 'GenericAlignedFASTAFormat',
+    'AlignedGenericSequenceIterator', 'NucleicAcidFASTAFormat',
+    'AlignedNucleicAcidFASTAFormat', 'AlignedNucleicAcidIterator'
+    'AlignedNucleicAcidSequencesDirectoryFormat',
+    'NucleicAcidSequencesDirectoryFormat', 'AlignedGenericFASTAFormat',
     'GenericFASTAFormat', 'GenericSequencesDirectoryFormat',
-    'GenericAlignedSequencesDirectoryFormat']
+    'AlignedGenericSequencesDirectoryFormat']
 
 importlib.import_module('q2_types.feature_data._transformer')
