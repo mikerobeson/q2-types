@@ -310,7 +310,7 @@ class AlignedNucleicAcidFASTAFormat(AlignedFASTAFormatMixin,
 
 
 AlignedNucleicAcidSequencesDirectoryFormat = model.SingleFileDirectoryFormat(
-    'AlignedGenericSequencesDirectoryFormat',
+    'AlignedNucleicAcidSequencesDirectoryFormat',
     'aligned-nucleic-acid-sequences.fasta',
     AlignedNucleicAcidFASTAFormat)
 
@@ -434,6 +434,9 @@ plugin.register_formats(
     AlignedProteinSequencesDirectoryFormat, RNAFASTAFormat,
     RNASequencesDirectoryFormat, AlignedRNAFASTAFormat,
     AlignedRNASequencesDirectoryFormat, PairedRNASequencesDirectoryFormat,
-    AlignedNucleicAcidFASTAFormat, AlignedNucleicAcidSequencesDirectoryFormat,
-    NucleicAcidSequencesDirectoryFormat
+    AlignedNucleicAcidFASTAFormat, NucleicAcidFASTAFormat,
+    AlignedNucleicAcidSequencesDirectoryFormat,
+    NucleicAcidSequencesDirectoryFormat, GenericFASTAFormat,
+    AlignedGenericSequencesDirectoryFormat,
+    GenericSequencesDirectoryFormat, AlignedGenericFASTAFormat
 )
